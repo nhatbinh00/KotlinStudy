@@ -12,54 +12,26 @@ on:
 
 jobs:
   build:
-    name: Build & Test
-    runs-on: ubuntu-20.04  # Tránh lỗi trên ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4  # Cập nhật lên v4
-
-      - name: Set up JDK 21
+      - uses: actions/checkout@v4
+      - name: set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
           java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
 
-      - name: Set up Gradle cache
-        uses: gradle/gradle-build-action@v2
-
-      - name: Grant execute permission for Gradle
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Build Debug APK
+      - name: Build with Gradle
         run: ./gradlew assembleDebug
 
-      - name: Run Unit Tests
-        run: ./gradlew test
-
-  deploy:
-    name: Deploy APK
-    needs: build
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-
-      - name: Grant execute permission for Gradle
-        run: chmod +x gradlew  # ✅ Cấp quyền thực thi
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
-
       - name: Upload APK to Firebase App Distribution
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: |
-          ./gradlew appDistributionUploadRelease
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: kotlinknowledge-f2647
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers
+          file: app/build/outputs/apk/debug/app-debug.apk
