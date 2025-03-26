@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+.firebaserc
+firebase.json
+*.cache
