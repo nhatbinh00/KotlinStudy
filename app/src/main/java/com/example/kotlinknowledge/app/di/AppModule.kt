@@ -86,11 +86,6 @@ object AppModule {
     }
 
     @Provides
-    fun provideProductRepository(services: ProductServices): ProductRepository {
-        return ProductRepositoryImpl(services)
-    }
-
-    @Provides
     @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder()

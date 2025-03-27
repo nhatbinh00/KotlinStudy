@@ -15,30 +15,30 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: ProductRepository
-): ViewModel() {
+) : ViewModel() {
     private val _featureProducts = MutableLiveData<ProductsModel>()
-    val featureProducts : LiveData<ProductsModel> = _featureProducts
+    val featureProducts: LiveData<ProductsModel> = _featureProducts
 
     private val _categories = MutableLiveData<CategoriesModel>()
-    val categories : LiveData<CategoriesModel> = _categories
+    val categories: LiveData<CategoriesModel> = _categories
 
-    fun getFeatureProducts(limit: Int = 10, skip: Int = 10){
+    fun getFeatureProducts(limit: Int = 10, skip: Int = 10) {
         viewModelScope.launch {
             try {
-                val response = repository.getProducts(limit.toString(),skip.toString(),)
+                val response = repository.getProducts(limit.toString(), skip.toString())
                 _featureProducts.value = response
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("ErrorTag", "${e.message}")
             }
         }
     }
 
-    fun getCategories(){
+    fun getCategories() {
         viewModelScope.launch {
             try {
                 val response = repository.getCategories()
                 _categories.value = response
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("ErrorTag", "${e.message}")
             }
         }

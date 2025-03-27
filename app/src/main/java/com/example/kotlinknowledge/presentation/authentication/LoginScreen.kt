@@ -160,7 +160,10 @@ fun LoginScreen(modifier: Modifier = Modifier,onLoginSuccess: () -> Unit) {
                                 Alignment.CenterHorizontally
                             ), text = "SIGN IN"
                     ) {
-                        loginViewModel.login()
+                        loginViewModel.login(
+                            username = userName,
+                            password = password,
+                        )
                     }
                 }
 

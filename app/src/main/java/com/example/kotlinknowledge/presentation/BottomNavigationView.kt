@@ -34,7 +34,6 @@ import com.example.kotlinknowledge.presentation.cart.CartScreen
 import com.example.kotlinknowledge.presentation.home.HomeScreen
 import com.example.kotlinknowledge.presentation.profile.ProfileScreen
 import com.example.kotlinknowledge.presentation.discover.DiscoverScreen
-import com.example.kotlinknowledge.presentation.discover.SearchScreen
 
 
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
@@ -47,6 +46,7 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: 
 @Composable
 fun BottomNavigationView(
     goToSearchScreen: ()-> Unit,
+    goToDetailProductScreen: (String)-> Unit,
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -62,7 +62,7 @@ fun BottomNavigationView(
         ) {
             NavHost(navController, startDestination = ScreenRoute.Home.route) {
                 composable(ScreenRoute.Home.route) {
-                    HomeScreen()
+                    HomeScreen(goToDetailProductScreen = goToDetailProductScreen)
                 }
                 composable(ScreenRoute.Discover.route) {
                     DiscoverScreen(goToSearchScreen = goToSearchScreen)

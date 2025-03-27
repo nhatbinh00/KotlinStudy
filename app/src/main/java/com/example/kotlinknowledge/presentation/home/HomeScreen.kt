@@ -22,7 +22,7 @@ import com.example.kotlinknowledge.presentation.home.widget.Recommended
 import com.example.kotlinknowledge.presentation.home.widget.TopCollection
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier,goToDetailProductScreen: (String)-> Unit) {
     val homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>()
 
     LaunchedEffect(Unit) {
@@ -45,7 +45,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             HomeHeader(modifier)
             CategoriesWidget(homeViewModel)
             BannerSlider()
-            FeatureProducts(homeViewModel)
+            FeatureProducts(homeViewModel){
+                goToDetailProductScreen(it)
+            }
             Advertisement()
             Recommended(homeViewModel)
             TopCollection()

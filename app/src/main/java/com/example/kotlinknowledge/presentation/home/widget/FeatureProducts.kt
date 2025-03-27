@@ -2,6 +2,7 @@ package com.example.kotlinknowledge.presentation.home.widget
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,7 @@ import com.example.kotlinknowledge.domain.model.ProductsModel.Product
 import com.example.kotlinknowledge.presentation.home.viewmodel.HomeViewModel
 
 @Composable
-fun FeatureProducts(homeViewModel: HomeViewModel) {
+fun FeatureProducts(homeViewModel: HomeViewModel,goToDetailProductScreen: (String)-> Unit) {
     Column {
         Row(
             modifier = Modifier
@@ -56,12 +57,12 @@ fun FeatureProducts(homeViewModel: HomeViewModel) {
                 style = AppStyle.appFont.regular(14.sp),
             )
         }
-        ListHorizontal(homeViewModel)
+        ListHorizontal(homeViewModel,goToDetailProductScreen)
     }
 }
 
 @Composable
-fun ListHorizontal(homeViewModel: HomeViewModel) {
+fun ListHorizontal(homeViewModel: HomeViewModel,goToDetailProductScreen: (String)-> Unit) {
     val featureProducts by homeViewModel.featureProducts.observeAsState()
 
     Row(
@@ -85,7 +86,7 @@ fun ListHorizontal(homeViewModel: HomeViewModel) {
                 LazyRow {
                     items(featureProducts!!.products!!) {
                         it?.let {
-                            SweaterCard(it)
+                            SweaterCard(it,goToDetailProductScreen)
                         }
                     }
                 }
@@ -95,9 +96,11 @@ fun ListHorizontal(homeViewModel: HomeViewModel) {
 }
 
 @Composable
-fun SweaterCard(product: Product) {
+fun SweaterCard(product: Product,onClick: (String)-> Unit) {
     Column(
-        modifier = Modifier.padding(end = AppStyle.appPadding.xxsm),
+        modifier = Modifier.padding(end = AppStyle.appPadding.xxsm).clickable {
+            onClick(product.id.toString())
+        },
         horizontalAlignment = Alignment.Start,
     ) {
         AsyncImage(

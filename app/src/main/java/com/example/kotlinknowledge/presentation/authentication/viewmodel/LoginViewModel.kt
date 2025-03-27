@@ -21,31 +21,31 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: AuthenticationRepository
-): ViewModel() {
+) : ViewModel() {
     private val _uiStateFlow = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
     internal val uiStateFlow: StateFlow<LoginUiState> = _uiStateFlow.asStateFlow()
 
-    private inline fun emitState(value : (LoginUiState)-> LoginUiState) = _uiStateFlow.update(value)
+    private inline fun emitState(value: (LoginUiState) -> LoginUiState) = _uiStateFlow.update(value)
 
-    init{
+    init {
         uiStateFlow.onEach {
-            when(it){
-                is LoginUiState.Failure -> Log.e(AppKey.appTag,"LoginUiState.Failure")
-                is LoginUiState.Initial -> Log.e(AppKey.appTag,"LoginUiState.Initial")
-                is LoginUiState.Loading -> Log.e(AppKey.appTag,"LoginUiState.Loading")
-                is LoginUiState.Succeeded -> Log.e(AppKey.appTag,"LoginUiState.Succeeded")
+            when (it) {
+                is LoginUiState.Failure -> Log.e(AppKey.appTag, "LoginUiState.Failure")
+                is LoginUiState.Initial -> Log.e(AppKey.appTag, "LoginUiState.Initial")
+                is LoginUiState.Loading -> Log.e(AppKey.appTag, "LoginUiState.Loading")
+                is LoginUiState.Succeeded -> Log.e(AppKey.appTag, "LoginUiState.Succeeded")
             }
         }.launchIn(viewModelScope)
     }
 
-    fun login() {
+    fun login(username: String, password: String) {
         // make uiState loading
         emitState {
             LoginUiState.Loading
         }
 
         viewModelScope.launch {
-            repository.login(LoginRequest("emilys","emilyspass"))
+            repository.login(LoginRequest(username, password))
                 .fold(
                     success = {
                         val result = it
@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun saveToken(token: String){
-        SharedPrefs.put(AppKey.token,token)
+    private fun saveToken(token: String) {
+        SharedPrefs.put(AppKey.token, token)
     }
 }
