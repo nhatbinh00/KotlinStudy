@@ -32,32 +32,15 @@ object AppModule {
         val interceptor = HttpLoggingInterceptor().apply {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
-        val client = OkHttpClient.Builder().apply {
+        val authInterceptor = AuthInterceptor()
+
+        return OkHttpClient.Builder().apply {
             this.addInterceptor(interceptor)
-                // time out setting
+                .addInterceptor(authInterceptor)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
-
-            this.addNetworkInterceptor(
-                Interceptor { chain ->
-                    val token = SharedPrefs.get<String>(AppKey.token,AppKey.emptyString)
-
-                    val request: Request?
-
-                    val original: Request = chain.request()
-                    // Request customization: add request headers
-                    val requestBuilder: Request.Builder = original.newBuilder()
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization","Bearer $token")
-
-                    request = requestBuilder.build()
-                    chain.proceed(request)
-                }
-            )
-
         }.build()
-        return client
     }
 
     private fun getRetrofit(): Retrofit {
