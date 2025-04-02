@@ -4,6 +4,7 @@ import com.example.kotlinknowledge.app.constant.AppConst
 import com.example.kotlinknowledge.app.constant.AppKey
 import com.example.kotlinknowledge.data.remote.api.AuthenticationServices
 import com.example.kotlinknowledge.data.remote.api.ProductServices
+import com.example.kotlinknowledge.data.remote.interceptor.AuthInterceptor
 import com.example.kotlinknowledge.data.remote.responses.ErrorResponse
 import com.example.kotlinknowledge.ulti.SharedPrefs
 import com.squareup.moshi.JsonAdapter
