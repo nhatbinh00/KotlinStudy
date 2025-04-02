@@ -5,4 +5,5 @@ object AppKey {
     const val emptyString = ""
     const val token = "token"
     const val USER_ID = "USER_ID"
+    const val refreshToken = "refreshToken"
 }
