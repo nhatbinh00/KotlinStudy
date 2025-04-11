@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlinknowledge.MainApplication
 import com.example.kotlinknowledge.app.constant.AppKey
+import com.example.kotlinknowledge.domain.model.AppError
 import com.example.kotlinknowledge.domain.model.FavoriteProduct
 import com.example.kotlinknowledge.domain.repositories.ProductRepository
 import com.example.kotlinknowledge.ulti.SharedPrefs
@@ -14,6 +15,7 @@ import javax.inject.Inject
 import com.github.michaelbull.result.fold
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -114,6 +116,31 @@ class DetailProductViewModel @Inject constructor(
                     )
                 }
 
+            }
+        }
+    }
+
+    fun addToCart(
+        quantity: Int,
+        onAddToCartSuccess: () -> Unit,
+        onError: (AppError) -> Unit
+    ) {
+        viewModelScope.launch {
+            if (_uiStateFlow.value is DetailProductUiState.Succeeded) {
+                val product = (_uiStateFlow.value as DetailProductUiState.Succeeded).product
+                val userId = SharedPrefs.get(AppKey.USER_ID, AppKey.emptyString).toInt()
+
+                repository.addToCart(userId, product.id.toInt(), quantity)
+                    .collectLatest { result ->
+                        result.fold(
+                            success = {
+                                onAddToCartSuccess()
+                            },
+                            failure = { error ->
+                                onError(AppError.ApiError(error.message ?: "Failed to add to cart"))
+                            }
+                        )
+                    }
             }
         }
     }

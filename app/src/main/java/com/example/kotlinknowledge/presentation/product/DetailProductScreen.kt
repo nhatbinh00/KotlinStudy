@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -22,7 +23,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.rounded.HeartBroken
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -41,12 +45,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.example.kotlinknowledge.R
@@ -63,7 +70,11 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DetailProductScreen(modifier: Modifier = Modifier, productId: String) {
+fun DetailProductScreen(
+    modifier: Modifier = Modifier,
+    productId: String,
+    navController: NavHostController
+) {
     val detailProductViewModel: DetailProductViewModel = hiltViewModel<DetailProductViewModel>()
 
     val uiState by detailProductViewModel.uiStateFlow.collectAsStateWithLifecycle()
@@ -153,139 +164,201 @@ fun DetailProductScreen(modifier: Modifier = Modifier, productId: String) {
                                 .background(color = AppStyle.appColor.kWhite)
                                 .fillMaxSize(),
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .verticalScroll(rememberScrollState())
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
+                            Column() {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .weight(1f)
+                                        .verticalScroll(rememberScrollState())
                                 ) {
-                                    Text(
-                                        text = product.title,
-                                        fontSize = 22.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "$${product.price}",
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.Black
-                                    )
-                                }
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(top = 16.dp)
-                                ) {
-                                    repeat(5) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_star),
-                                            contentDescription = "Star",
-                                            tint = Color.Unspecified
+                                    Row(
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = product.title,
+                                            fontSize = 22.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            text = "$${product.price}",
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.Black
                                         )
                                     }
-                                    Text(
-                                        text = "(${product.reviews.size})",
-                                        fontSize = 14.sp,
-                                        color = Color.Gray
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
                                     Row(
-                                        modifier = Modifier.weight(1f),
                                         verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.padding(top = 16.dp)
                                     ) {
-                                        Text(text = "Color")
-                                        Row {
-                                            Spacer(modifier = Modifier.width(16.dp))
-                                            listOf(
-                                                Color.Blue,
-                                                Color.Black,
-                                                Color.Red
-                                            ).forEach { color ->
-                                                Box(
-                                                    modifier = Modifier
-                                                        .padding(4.dp)
-                                                        .size(25.dp)
-                                                        .clip(CircleShape)
-                                                        .background(color)
-                                                )
-                                            }
+                                        repeat(5) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_star),
+                                                contentDescription = "Star",
+                                                tint = Color.Unspecified
+                                            )
                                         }
+                                        Text(
+                                            text = "(${product.reviews.size})",
+                                            fontSize = 14.sp,
+                                            color = Color.Gray
+                                        )
                                     }
 
+                                    Spacer(modifier = Modifier.height(16.dp))
                                     Row(
-                                        modifier = Modifier.weight(1f),
                                         verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
                                     ) {
-                                        Spacer(modifier = Modifier.height(16.dp))
-                                        Text(text = "Size")
-                                        Row {
-                                            Spacer(modifier = Modifier.width(16.dp))
-                                            listOf("S", "M", "L").forEach { size ->
-                                                Box(
-                                                    modifier = Modifier
-                                                        .padding(4.dp)
-                                                        .size(25.dp)
-                                                        .clip(CircleShape)
-                                                        .background(Color.Gray),
-                                                    contentAlignment = Alignment.Center
-                                                ) {
-                                                    Text(text = size)
+                                        Row(
+                                            modifier = Modifier.weight(1f),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Text(text = "Color")
+                                            Row {
+                                                Spacer(modifier = Modifier.width(16.dp))
+                                                listOf(
+                                                    Color.Blue,
+                                                    Color.Black,
+                                                    Color.Red
+                                                ).forEach { color ->
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(4.dp)
+                                                            .size(25.dp)
+                                                            .clip(CircleShape)
+                                                            .background(color)
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.weight(1f),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text(text = "Size")
+                                            Row {
+                                                Spacer(modifier = Modifier.width(16.dp))
+                                                listOf("S", "M", "L").forEach { size ->
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(4.dp)
+                                                            .size(25.dp)
+                                                            .clip(CircleShape)
+                                                            .background(Color.Gray),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        Text(text = size)
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
 
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(text = "Description", fontWeight = FontWeight.Bold)
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Text(
-                                    text = product.description,
-                                    fontSize = 14.sp,
-                                    color = Color.Gray
-                                )
-
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(text = "Reviews", fontWeight = FontWeight.Bold)
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
-
-                                ) {
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Text(text = "Description", fontWeight = FontWeight.Bold)
+                                    Spacer(modifier = Modifier.height(6.dp))
                                     Text(
-                                        text = "${product.rating} OUT OF 5",
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
+                                        text = product.description,
+                                        fontSize = 14.sp,
+                                        color = Color.Gray
                                     )
-                                    Column {
-                                        Row {
-                                            repeat(5) {
-                                                Icon(
-                                                    painter = painterResource(id = R.drawable.ic_star),
-                                                    contentDescription = "Star",
-                                                    tint = Color.Unspecified
-                                                )
+
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Text(text = "Reviews", fontWeight = FontWeight.Bold)
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier.fillMaxWidth()
+
+                                    ) {
+                                        Text(
+                                            text = "${product.rating} OUT OF 5",
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Column {
+                                            Row {
+                                                repeat(5) {
+                                                    Icon(
+                                                        painter = painterResource(id = R.drawable.ic_star),
+                                                        contentDescription = "Star",
+                                                        tint = Color.Unspecified
+                                                    )
+                                                }
                                             }
+                                            Spacer(modifier = Modifier.height(6.dp))
+                                            Text(text = "${product.reviews.size} ratings")
                                         }
-                                        Spacer(modifier = Modifier.height(6.dp))
-                                        Text(text = "${product.reviews.size} ratings")
+                                    }
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    ReviewAnalytics(product.reviews)
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    product.reviews.map {
+                                        Reviews(it)
                                     }
                                 }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                ReviewAnalytics(product.reviews)
-                                Spacer(modifier = Modifier.height(16.dp))
-                                product.reviews.map {
-                                    Reviews(it)
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            detailProductViewModel.addToCart(
+                                                quantity = 1,
+                                                onAddToCartSuccess = {
+                                                    coroutineScope.launch {
+                                                        snackbarHostState.showSnackbar(
+                                                            message = "Đã thêm vào giỏ hàng thành công!"
+                                                        )
+                                                    }
+                                                    navController.navigate("cart_screen")
+                                                },
+                                                onError = { error ->
+                                                    coroutineScope.launch {
+                                                        snackbarHostState.showSnackbar(
+                                                            message = "Lỗi khi thêm vào giỏ hàng: ${error.message}"
+                                                        )
+                                                    }
+                                                }
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(50.dp)),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color.Black,
+                                            contentColor = Color.White
+                                        ),
+                                        contentPadding = PaddingValues(
+                                            horizontal = 25.dp,
+                                            vertical = 15.dp
+                                        )
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Outlined.ShoppingBag,
+                                                contentDescription = "Add to cart",
+                                                tint = Color.White,
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                text = "Add To Cart",
+                                                style = TextStyle(
+                                                    fontWeight = FontWeight.Medium,
+                                                    fontSize = 15.sp
+                                                )
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
