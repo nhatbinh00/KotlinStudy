@@ -13,6 +13,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // init Context Global
+        MainApplication.initializeContext(applicationContext)
         // init Local DB
         MainApplication.initializeDb(applicationContext)
 

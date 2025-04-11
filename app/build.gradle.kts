@@ -109,6 +109,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // chucker
+    debugImplementation(libs.library)
+    releaseImplementation(libs.library.no.op)
 }
 
 // Allow references to generated code

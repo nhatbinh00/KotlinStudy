@@ -1,5 +1,7 @@
 package com.example.kotlinknowledge.app.di
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.kotlinknowledge.MainApplication
 import com.example.kotlinknowledge.app.constant.AppConst
 import com.example.kotlinknowledge.app.constant.AppKey
 import com.example.kotlinknowledge.data.remote.api.AuthenticationServices
@@ -38,6 +40,8 @@ object AppModule {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+
+            this.addInterceptor(ChuckerInterceptor(MainApplication.appContext))
 
             this.addNetworkInterceptor(
                 Interceptor { chain ->

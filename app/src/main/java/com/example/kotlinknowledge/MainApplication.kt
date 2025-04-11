@@ -12,6 +12,7 @@ class MainApplication: Application(){
     companion object{
         private var mSelf: MainApplication? = null
         lateinit var db: AppDatabase
+        lateinit var appContext: Context
         fun self(): MainApplication? {
             return mSelf
         }
@@ -21,6 +22,10 @@ class MainApplication: Application(){
                 appContext,
                 AppDatabase::class.java, "ktx_database"
             ).build()
+        }
+
+        fun initializeContext(context: Context){
+            appContext = context
         }
     }
 
