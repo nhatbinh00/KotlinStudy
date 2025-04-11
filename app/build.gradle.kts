@@ -109,6 +109,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    implementation(files("libs/internalsdk-debug.aar"))
 }
 
 // Allow references to generated code

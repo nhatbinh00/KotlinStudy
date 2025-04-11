@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "KotlinKnowledge"
 include(":app")
- 
+include(":internalsdk")

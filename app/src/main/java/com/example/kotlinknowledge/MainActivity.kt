@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import com.example.kotlinknowledge.app.config.AppNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
