@@ -1,6 +1,7 @@
 package com.example.kotlinknowledge.domain.repositories
 
 import com.example.kotlinknowledge.data.remote.requests.LoginRequest
+import com.example.kotlinknowledge.data.remote.responses.AddToCartResponse
 import com.example.kotlinknowledge.data.remote.responses.DetailProductResponse
 import com.example.kotlinknowledge.data.remote.responses.LoginResponse
 import com.example.kotlinknowledge.domain.model.AppError
@@ -9,6 +10,8 @@ import com.example.kotlinknowledge.domain.model.DetailProductModel
 import com.example.kotlinknowledge.domain.model.FavoriteProduct
 import com.example.kotlinknowledge.domain.model.ProductsModel
 import com.github.michaelbull.result.Result
+import kotlinx.coroutines.flow.Flow
+
 
 
 interface ProductRepository {
@@ -21,6 +24,8 @@ interface ProductRepository {
     suspend fun addToFavorite(product: FavoriteProduct): Boolean
 
     suspend fun removeFavorite(product: FavoriteProduct): Boolean
+
+    suspend fun addToCart(userId: Int, productId: Int, quantity: Int): Flow<Result<AddToCartResponse, AppError>>
 
     // https://dummyjson.com/image/SIZE/BACKGROUND/COLOR
     fun getDynamicImage(

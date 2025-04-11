@@ -108,6 +108,9 @@ sealed class AppError : RuntimeException, Serializable {
   }
 
   class UnknownException(cause: Throwable?) : AppError(cause)
+  class ApiError(val errorMessage: String? = null) : AppError(errorMessage)
+  class UnexpectedError(val errorMessage: String? = null) : AppError(errorMessage)
+
 
   companion object {
     private const val serialVersionUID = 1L

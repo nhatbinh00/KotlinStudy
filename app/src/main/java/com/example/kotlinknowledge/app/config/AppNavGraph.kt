@@ -51,7 +51,7 @@ fun AppNavGraph() {
                 val productId = navBackStackEntry.arguments?.getString("productId")
                 /* We check if it's not null */
                 productId?.let {
-                    DetailProductScreen(productId = it)
+                    DetailProductScreen(productId = it, navController = navController)
                 }
             }
         }
